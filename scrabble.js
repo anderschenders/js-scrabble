@@ -127,7 +127,23 @@ Scrabble.Player = class Player {
     return currentPlay;
   }
 
+  highestScoringWord() {
+    let playsLength = this.plays.length;
+    if (playsLength === 0) {
+      throw new Error('You have not played any words');
+    }
+    let highestScoringWord = Scrabble.score(this.plays[0]);
+    for (let i = 1; i < playsLength; i++) {
+      if (Scrabble.score(this.plays[i]) > highestScoringWord) {
+        highestScoringWord = this.plays[i];
+      }
+    }
+    return highestScoringWord;
+  }
 
+  highestWordScore() {
+    
+  }
 
 };
 
