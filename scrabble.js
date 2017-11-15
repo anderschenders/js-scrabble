@@ -92,13 +92,22 @@ Scrabble.Player = class Player {
 
     this.name = name;
     this.plays = [];
-    this.totalScore = 0;
+    // this.totalScore = 0;
+  }
+
+  totalScore() {
+    // this.plays.forEach(play => this.totalScore += Scrabble.score(play));
+    let totalScore = 0;
+    this.plays.forEach(function(play) {
+      totalScore += Scrabble.score(play);
+    })
+    return totalScore;
   }
 
   hasWon() {
-    if (this.totalScore > 100) {
+    if (this.totalScore() >= 100) {
       return true;
-    }
+    } else
     return false;
   }
 
@@ -113,10 +122,12 @@ Scrabble.Player = class Player {
       return false;
     }
 
-    let currentPlay = word
-    this.plays.push(word)
-    return currentPlay
+    let currentPlay = word;
+    this.plays.push(word);
+    return currentPlay;
   }
+
+
 
 };
 
