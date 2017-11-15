@@ -10,22 +10,17 @@ const SCORECHART = {
 
 const Scrabble = {
   score(word) {
-    // ensure word is a string
-    if (!/^[a-zA-Z]+$/.test(word)) {
+      if (!/^[a-zA-Z]+$/.test(word)) {
       throw new ArgumentException('Input must only contain letters');
     } else if (word.length > 7) {
       throw new ArgumentException('Input must not be greater than 7 characters');
     }
-    // if (typeof word !== 'string') {
-    //   throw 'Input must be a string';
-    // }
 
     let wordUpper = word.toUpperCase();
     let wordScore = 0;
 
     for (let i = 0; i < wordUpper.length; i++) {
       if (SCORECHART.hasOwnProperty(wordUpper[i])) {
-        // key = wordUpper[i];
         wordScore += SCORECHART[wordUpper[i]];
       }
     }
@@ -92,11 +87,9 @@ Scrabble.Player = class Player {
 
     this.name = name;
     this.plays = [];
-    // this.totalScore = 0;
   }
 
   totalScore() {
-    // this.plays.forEach(play => this.totalScore += Scrabble.score(play));
     let totalScore = 0;
     this.plays.forEach(function(play) {
       totalScore += Scrabble.score(play);
@@ -107,7 +100,7 @@ Scrabble.Player = class Player {
   hasWon() {
     if (this.totalScore() >= 100) {
       return true;
-    } else
+    }
     return false;
   }
 
@@ -127,22 +120,23 @@ Scrabble.Player = class Player {
     return currentPlay;
   }
 
-  highestScoringWord() {
+  highestWordScore() {
     let playsLength = this.plays.length;
     if (playsLength === 0) {
       throw new Error('You have not played any words');
     }
-    let highestScoringWord = Scrabble.score(this.plays[0]);
+    let highestWordScore =  Scrabble.score(this.plays[0]);
     for (let i = 1; i < playsLength; i++) {
-      if (Scrabble.score(this.plays[i]) > highestScoringWord) {
-        highestScoringWord = this.plays[i];
+      let currentScore = Scrabble.score(this.plays[i]);
+      if (currentScore > highestWordScore) {
+        highestWordScore = currentScore;
       }
-    }
-    return highestScoringWord;
+    };
+    return highestWordScore;
   }
 
-  highestWordScore() {
-    
+  highestScoringWord() {
+    return Scrabble.highestScoreFrom(this.plays);
   }
 
 };
