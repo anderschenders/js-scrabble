@@ -9,12 +9,12 @@ const SCORECHART = {
     };
 
 const Scrabble = {
-  score: function score(word) {
+  score(word) {
     // ensure word is a string
     if (!/^[a-zA-Z]+$/.test(word)) {
       throw new ArgumentException('Input must only contain letters');
     } else if (word.length > 7) {
-      throw new ArgumentException('Input must be a max of 7 characters long');
+      throw new ArgumentException('Input must not be greater than 7 characters');
     }
     // if (typeof word !== 'string') {
     //   throw 'Input must be a string';
@@ -37,20 +37,87 @@ const Scrabble = {
     return wordScore;
   },
 
-  highestScoreFrom: function highestScoreFrom(words) {
-    let highestScore = words[0];
-    words.forEach(function(word)) {
-      if (highestScore < Scrabble.score(word)) {
-
+  tie(highestScoreWord, word) {
+    if (highestScoreWord.length === 7) {
+      return highestScoreWord;
+    } else if (word.length === 7) {
+      return word;
+    } else {
+      if (highestScoreWord.length > word.length) {
+        return word;
+      } else if (highestScoreWord.length < word.length) {
+        return highestScoreWord;
+      } else {
+        return highestScoreWord;
       }
     }
+  },
 
+  highestScoreFrom(words) {
+    if (words.length === 0) {
+      throw new ArgumentException('Must have at least one word');
+    }
+
+    let highestScore = Scrabble.score(words[0]),
+        highestScoreWord = words[0];
+
+    for (i = 1; i < words.length; i++) {
+      let wordScore = Scrabble.score(words[i]);
+      if (highestScore < wordScore) {
+        highestScore = wordScore;
+        highestScoreWord = words[i];
+      } else if (highestScore === wordScore) {
+        highestScoreWord = Scrabble.tie(highestScoreWord, words[i]);
+      }
+    }
+    //
+    // words.forEach(function(word) {
+    //   let wordScore = Scrabble.score(word);
+    //   if (highestScore < wordScore) {
+    //     highestScoreWord = word;
+    //   } else if (highestScore === wordScore) {
+    //     highestScoreWord = Scrabble.tie(highestScoreWord, word);
+    //   }
+    // })
+    return highestScoreWord;
   }
 
 };
 
-Scrabble.Player = class {
-  // TODO: implement the Player class
+Scrabble.Player = class Player {
+  constructor(name){
+    if (name === undefined) {
+      throw new ArgumentException('You must have a name');
+    }
+
+    this.name = name;
+    this.plays = [];
+    this.totalScore = 0;
+  }
+
+  hasWon() {
+    if (this.totalScore > 100) {
+      return true;
+    }
+    return false;
+  }
+
+  play(word) {
+    if (!/^[a-zA-Z]+$/.test(word)) {
+      throw new ArgumentException('Input must only contain letters');
+    } else if (word.length > 7) {
+      throw new ArgumentException('Input must not be greater than 7 characters');
+    }
+
+    if (this.hasWon()) {
+      return false;
+    }
+
+    let currentPlay = word
+    this.plays.push(word)
+    return currentPlay
+  }
+
 };
 
 module.exports = Scrabble;
